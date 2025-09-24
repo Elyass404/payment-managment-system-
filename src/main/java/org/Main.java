@@ -1,4 +1,4 @@
-package org.example;
+package org;
 import com.mysql.cj.jdbc.Driver;
 import util.JdbcConnectionManager;
 
