@@ -18,7 +18,7 @@ public class Department {
         this.agents = agents;
     }
 
-    //Getters and Setters 
+    //Getters and Setters
     public String getIdDepartment() {
         return idDepartment;
     }
