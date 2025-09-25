@@ -2,16 +2,16 @@ CREATE DATABASE IF NOT EXISTS payments_management CHARACTER SET utf8mb4 COLLATE 
 USE payments_management;
 
 CREATE TABLE IF NOT EXISTS department (
-                                          department_id INT AUTO_INCREMENT PRIMARY KEY,
-                                          name VARCHAR(100) NOT NULL UNIQUE,
+    department_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
     description VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
 CREATE TABLE IF NOT EXISTS agent (
-                                     agent_id INT AUTO_INCREMENT PRIMARY KEY,
-                                     first_name VARCHAR(100) NOT NULL,
+    agent_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
@@ -23,9 +23,9 @@ CREATE TABLE IF NOT EXISTS agent (
     );
 
 CREATE TABLE IF NOT EXISTS payment (
-                                       payment_id INT AUTO_INCREMENT PRIMARY KEY,
-                                       agent_id INT NOT NULL,
-                                       amount DECIMAL(12,2) NOT NULL,
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    agent_id INT NOT NULL,
+    amount DECIMAL(12,2) NOT NULL,
     currency CHAR(3) NOT NULL DEFAULT 'USD',
     payment_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     payment_type ENUM('Salary','Bonus','Compensation','Prime') NOT NULL,
