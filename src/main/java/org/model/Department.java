@@ -3,9 +3,9 @@ package org.model;
 import java.util.List;
 
 public class Department {
-    String idDepartment;
-    String name;
-    List<Agent> agents;
+    private String idDepartment;
+    private String name;
+    private List<Agent> agents;
 
     //default constructor
     public Department(){};

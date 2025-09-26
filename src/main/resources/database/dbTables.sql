@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS agent (
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     agent_type ENUM('Worker','Responsible','Director', 'Intern') NOT NULL,
     department_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
