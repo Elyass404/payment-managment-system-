@@ -3,7 +3,7 @@ package org.model;
 import java.util.List;
 
 public class Department {
-    private String idDepartment;
+    private int idDepartment;
     private String name;
     private List<Agent> agents;
 
@@ -19,7 +19,7 @@ public class Department {
     }
 
     //Getters and Setters
-    public String getIdDepartment() {
+    public int getIdDepartment() {
         return idDepartment;
     }
 

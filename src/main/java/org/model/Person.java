@@ -12,6 +12,12 @@ public abstract class Person {
         this.email = email;
         this.password = password;
     }
+    //constructor with no password
+    protected Person(String firstName, String lastName, String email) {
+        this.firstName= firstName;
+        this.lastName=lastName;
+        this.email=email;
+    }
 
     //getters and setters methods area
 

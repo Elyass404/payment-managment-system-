@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Agent extends Person {
 
-    private String idAgent;
+    private int idAgent;
     private String typeAgent;
     private Department department;
     private List<Payment> payments;
@@ -14,8 +14,19 @@ public class Agent extends Person {
         super(firstname, lastname, email, password);
     };
 
+    //constructor without password
+    public Agent(int idAgent, String firstName, String lastName, String email,
+                 String typeAgent, Department department, List<Payment> payments){
+        super(firstName, lastName, email);
+        this.idAgent= idAgent;
+        this.typeAgent = typeAgent;
+        this.department = department;
+        this.payments = payments;
+
+    }
+
     //Parametrized Constructor
-    public Agent(String idAgent, String firstName, String lastName, String email, String password,
+    public Agent(int idAgent, String firstName, String lastName, String email, String password,
                  String typeAgent, Department department, List<Payment> payments) {
 
         super(firstName, lastName, email, password);
@@ -27,11 +38,11 @@ public class Agent extends Person {
 
     //Getters and setters
 
-    public String getIdAgent() {
+    public int getIdAgent() {
         return idAgent;
     }
 
-    public void setIdAgent(String idAgent) {
+    public void setIdAgent(int idAgent) {
         this.idAgent = idAgent;
     }
 
