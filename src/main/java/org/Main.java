@@ -22,7 +22,7 @@ public class Main {
         departmentDao.addDepartment(dep);
 
         Optional<Department> fetchedDep = departmentDao.getDepartmentById(dep.getIdDepartment());
-        fetchedDep.ifPresent(d -> System.out.println("Department fetched: " + d.getName()));
+        fetchedDep.ifPresent(d -> System.out.println("Department found: " + d.getName()));
 
         // Test AgentDao
         AgentDaoImpl agentDao = new AgentDaoImpl(conn);

@@ -24,7 +24,7 @@ public class AgentDaoImpl implements AgentDao {
     public void addAgent(Agent agent){
 
         String sql = "INSERT INTO agent(first_name,last_name, email, password, agent_type, department_id) VALUES (?,?,?,?,?,?)";
-        try(PreparedStatement  stmnt = connection.prepareStatement(sql)){
+        try(PreparedStatement  stmnt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             stmnt.setString(1, agent.getFirstName());
             stmnt.setString(2, agent.getLastName());
             stmnt.setString(3, agent.getEmail());
@@ -34,6 +34,11 @@ public class AgentDaoImpl implements AgentDao {
 
             int result = stmnt.executeUpdate();
             if(result > 0){
+
+                ResultSet agentId = stmnt.getGeneratedKeys();
+                if(agentId.next()){
+                agent.setIdAgent(agentId.getInt(1));
+                }
                 System.out.println("You successfully added a new agent.");
             }else{
                 System.out.println("Sorry, something went wrong when adding new agent, please try again.");
