@@ -13,6 +13,10 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     private Connection connection;
 
+    public DepartmentDaoImpl(Connection connection) {
+        this.connection = connection;
+    }
+
     @Override
     public void addDepartment(Department department) {
         String sql = "INSERT INTO department(name) VALUES (?)";

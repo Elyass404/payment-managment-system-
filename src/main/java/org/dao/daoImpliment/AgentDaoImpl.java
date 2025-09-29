@@ -2,6 +2,8 @@ package org.dao.daoImpliment;
 
 import org.dao.AgentDao;
 import org.model.Agent;
+import org.model.Department;
+import org.model.Payment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,12 @@ public class AgentDaoImpl implements AgentDao {
             ResultSet result = stmnt.executeQuery();
 
             if (result.next()) {
+
+                int departmentId = result.getInt("department_id");
+                Department department = new DepartmentDaoImpl(connection)
+                        .getDepartmentById(departmentId)
+                        .orElse(null);
+
                 // making an agent instance without the pass word
                 Agent agent = new Agent(
                         result.getInt("agent_id"),
@@ -62,10 +70,14 @@ public class AgentDaoImpl implements AgentDao {
                         result.getString("email"),
                         result.getString("agent_type"),
 
-                        //until we made the methods of getting the department or making the joins
-                        null,
+                        department,
+                        //we will keep the payments null at first, because we need the agent id to get payments
                         null
                 );
+
+                List<Payment> payments = new PaymentDaoImpl(connection)
+                        .getPaymentsByAgentId(agent.getIdAgent());
+                agent.setPayments(payments); //now we got the agent payments
 
                 return Optional.of(agent);
             }
@@ -85,6 +97,12 @@ public class AgentDaoImpl implements AgentDao {
 
             ResultSet result = stmnt.executeQuery();
             while(result.next()){
+
+                int departmentId = result.getInt("department_id");
+                Department department = new DepartmentDaoImpl(connection)
+                        .getDepartmentById(departmentId)
+                        .orElse(null);
+
                 Agent agent = new Agent(
                         result.getInt("agent_id"),
                         result.getString("first_name"),
@@ -92,10 +110,15 @@ public class AgentDaoImpl implements AgentDao {
                         result.getString("email"),
                         result.getString("agent_type"),
 
-                        //until we made the methods of getting the department or making the joins
-                        null,
+                        department,
+                        //we will keep the payments null at first, because we need the agent id to get payments
                         null
                 );
+
+                List<Payment> payments = new PaymentDaoImpl(connection)
+                        .getPaymentsByAgentId(agent.getIdAgent());
+                agent.setPayments(payments);
+
                 agents.add(agent);
             }
         }catch(SQLException e){
