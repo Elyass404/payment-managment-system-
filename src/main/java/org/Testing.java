@@ -6,6 +6,8 @@ import org.dao.daoImpliment.PaymentDaoImpl;
 import org.model.Agent;
 import org.model.Department;
 import org.model.Payment;
+import org.service.DepartmentService;
+import org.service.serviceImpl.DepartmentServiceImpl;
 import util.JdbcConnectionManager;
 
 import java.time.LocalDate;
@@ -51,17 +53,50 @@ public class Testing {
             }
 
             //testing the payment entity
+            //testing the payment entity
             PaymentDao paydao = new PaymentDaoImpl(conn);
             Payment payment = new Payment( agent,  1200.00,  "Salary" ,  true, LocalDateTime.of(2025, 1, 15, 0, 0), "His salary of the month");
 
             paydao.addPayment(payment);
-            paydao.getAllPayments().forEach(System.out::println);
+            //paydao.getPaymentsByAgentId(17);
+            //paydao.getPaymentById(4);
+            paydao.getAllPayments();
+            //paydao.getPaymentsByAgentId(17);
 
 
             //teting the delete methods
 //        agentDao.deleteAgent(agent);
 //        departmentDao.deleteDepartment(dep);
 //          paymentDao.deletePayment(payment);
+
+            //________________________________________________
+
+            //testing the implimentation of the services
+
+            DepartmentService departmentService =  new DepartmentServiceImpl(conn);
+
+            // Add new department
+            Department depart = new Department("Finance");
+            departmentService.addDepartment(dep);
+
+            // Fetch department by ID
+            Department fetchedDep = departmentService.getDepartmentById(depart.getIdDepartment());
+            if (fetchedDep != null) {
+                System.out.println("Department found: " + fetchedDep.getName());
+            }
+
+            // Update department
+            depart.setName("Accounting");
+            departmentService.updateDepartment(depart);
+
+            // Get all departments
+            List<Department> allDepartments = departmentService.getAllDepartments();
+            for (Department d : allDepartments) {
+                System.out.println("Department: " + d.getIdDepartment() + " | " + d.getName());
+            }
+
+            // Delete department
+            departmentService.deleteDepartment(depart.getIdDepartment());
 
         } catch (Exception e){
             e.printStackTrace();

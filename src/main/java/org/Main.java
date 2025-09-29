@@ -1,19 +1,13 @@
 package org;
-import com.mysql.cj.jdbc.Driver;
-import org.dao.AgentDao;
-import org.dao.DepartmentDao;
-import org.dao.PaymentDao;
-import org.dao.daoImpliment.AgentDaoImpl;
-import org.dao.daoImpliment.DepartmentDaoImpl;
-import org.dao.daoImpliment.PaymentDaoImpl;
 import org.model.Agent;
 import org.model.Department;
-import org.model.Payment;
+import org.service.AgentService;
+import org.service.DepartmentService;
+import org.service.serviceImpl.AgentServiceImpl;
+import org.service.serviceImpl.DepartmentServiceImpl;
 import util.JdbcConnectionManager;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 
 public class Main {
@@ -24,24 +18,44 @@ public class Main {
         System.out.println("The connection between the project and the database is done successfully: " + conn);
         //conn.close();
 
-            DepartmentDao departmentDao = new DepartmentDaoImpl(conn);
-           Department dep = new Department("Depart");
-            departmentDao.addDepartment(dep);
+            // ----- Department Service -----
+            DepartmentService departmentService = new DepartmentServiceImpl(conn);
 
-           AgentDao agentDao = new AgentDaoImpl(conn);
-            Agent agent = new Agent("Ahmad", "test", "ahmad.test@example.com", "1234","Worker", dep);
-            agentDao.addAgent(agent);
+            Department dep = new Department("HR");
+            departmentService.addDepartment(dep);
 
+            Department fetchedDep = departmentService.getDepartmentById(dep.getIdDepartment());
+            System.out.println("📌 Department found: " + fetchedDep.getName());
 
-            //testing the payment entity
-            PaymentDao paydao = new PaymentDaoImpl(conn);
-            Payment payment = new Payment( agent,  1200.00,  "Salary" ,  true, LocalDateTime.of(2025, 1, 15, 0, 0), "His salary of the month");
+            // ----- Agent Service -----
+            AgentService agentService = new AgentServiceImpl(conn);
 
-            paydao.addPayment(payment);
-            //paydao.getPaymentsByAgentId(17);
-            //paydao.getPaymentById(4);
-            paydao.getAllPayments();
-            //paydao.getPaymentsByAgentId(17);
+            Agent agent = new Agent("Alien", "hello", "alien.hello@example.com", "1234", "Worker", dep);
+            agentService.addAgent(agent);
+
+            // Update the agent
+            agent.setEmail("alien.helloaw@example.com");
+            agentService.updateAgent(agent);
+
+            // Fetch agent by ID
+            Agent fetchedAgent = agentService.getAgentById(agent.getIdAgent());
+            if (fetchedAgent != null) {
+                System.out.println("Agent found: " +
+                        fetchedAgent.getIdAgent() + " | " +
+                        fetchedAgent.getFirstName() + " " +
+                        fetchedAgent.getLastName() + " | " +
+                        fetchedAgent.getEmail());
+            }
+
+            // Get all agents
+            List<Agent> allAgents = agentService.getAllAgents();
+            System.out.println("List of Agents:");
+            for (Agent a : allAgents) {
+                System.out.println(" - " + a.getIdAgent() + " | " + a.getFirstName() + " " + a.getLastName());
+            }
+
+            // Test delete
+            // agentService.deleteAgent(agent.getIdAgent());
 
         } catch (Exception e){
         e.printStackTrace();
