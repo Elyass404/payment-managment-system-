@@ -1,11 +1,18 @@
 package org;
 import com.mysql.cj.jdbc.Driver;
+import org.dao.AgentDao;
+import org.dao.DepartmentDao;
+import org.dao.PaymentDao;
 import org.dao.daoImpliment.AgentDaoImpl;
 import org.dao.daoImpliment.DepartmentDaoImpl;
+import org.dao.daoImpliment.PaymentDaoImpl;
 import org.model.Agent;
 import org.model.Department;
+import org.model.Payment;
 import util.JdbcConnectionManager;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -17,23 +24,26 @@ public class Main {
         System.out.println("The connection between the project and the database is done successfully: " + conn);
         //conn.close();
 
-        DepartmentDaoImpl departmentDao = new DepartmentDaoImpl(conn);
-        Department dep = new Department("Dev");
-        departmentDao.addDepartment(dep);
+            DepartmentDao departmentDao = new DepartmentDaoImpl(conn);
+           Department dep = new Department("Depart");
+            departmentDao.addDepartment(dep);
 
-        Optional<Department> fetchedDep = departmentDao.getDepartmentById(dep.getIdDepartment());
-        fetchedDep.ifPresent(d -> System.out.println("Department found: " + d.getName()));
+           AgentDao agentDao = new AgentDaoImpl(conn);
+            Agent agent = new Agent("Ahmad", "test", "ahmad.test@example.com", "1234","Worker", dep);
+            agentDao.addAgent(agent);
 
-        // Test AgentDao
-        AgentDaoImpl agentDao = new AgentDaoImpl(conn);
-        Agent agent = new Agent("ilyass", "test", "ilyass.test@example.com", "1234","Worker", dep);
 
-        agentDao.addAgent(agent);
+            //testing the payment entity
+            PaymentDao paydao = new PaymentDaoImpl(conn);
+            Payment payment = new Payment( agent,  1200.00,  "Salary" ,  true, LocalDateTime.of(2025, 1, 15, 0, 0), "His salary of the month");
 
-        Optional<Agent> getAgent = agentDao.getAgentById(agent.getIdAgent());
-        getAgent.ifPresent(a -> System.out.println("Agent found: "+a.getIdAgent()+" | " + a.getFirstName() + " " + a.getLastName()));
+            paydao.addPayment(payment);
+            //paydao.getPaymentsByAgentId(17);
+            //paydao.getPaymentById(4);
+            paydao.getAllPayments();
+            //paydao.getPaymentsByAgentId(17);
 
-    } catch (Exception e){
+        } catch (Exception e){
         e.printStackTrace();
     }
 }

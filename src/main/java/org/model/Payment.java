@@ -7,7 +7,7 @@ public class Payment {
 
     private int paymentId;
     private Agent agent;
-    private BigDecimal amount;
+    private double amount;
     private String paymentType;
     private boolean verified;
     private LocalDateTime date;
@@ -16,7 +16,7 @@ public class Payment {
     // Constructors
 
     // Full constructor
-    public Payment(int paymentId, Agent agent, BigDecimal amount, String paymentType, boolean verified, LocalDateTime date, String reason) {
+    public Payment(int paymentId, Agent agent, double amount, String paymentType, boolean verified, LocalDateTime date, String reason) {
         this.paymentId = paymentId;
         this.agent = agent;
         this.amount = amount;
@@ -27,7 +27,7 @@ public class Payment {
     }
 
     // Constructor without paymentId (for inserting new payments)
-    public Payment(Agent agent, BigDecimal amount, String paymentType, boolean verified, LocalDateTime date, String reason) {
+    public Payment(Agent agent, double amount, String paymentType, boolean verified, LocalDateTime date, String reason) {
         this.agent = agent;
         this.amount = amount;
         this.paymentType = paymentType;
@@ -57,11 +57,11 @@ public class Payment {
         this.agent = agent;
     }
 
-    public BigDecimal getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 

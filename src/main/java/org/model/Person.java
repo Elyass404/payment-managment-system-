@@ -6,6 +6,8 @@ public abstract class Person {
     private String email  ;
     private String password  ;
 
+    protected Person(){}
+
     protected Person(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;

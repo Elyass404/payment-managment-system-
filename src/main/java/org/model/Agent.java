@@ -9,7 +9,11 @@ public class Agent extends Person {
     private Department department;
     private List<Payment> payments;
 
-    //default constructor
+
+    //default Constructor(no args)
+    public Agent(){}
+
+    //Constructor with parent constructor
     public Agent(String firstname, String lastname, String email, String password){
         super(firstname, lastname, email, password);
     };
