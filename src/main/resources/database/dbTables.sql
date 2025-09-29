@@ -4,7 +4,6 @@ USE payments_management;
 CREATE TABLE IF NOT EXISTS department (
     department_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
-    description VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
@@ -26,10 +25,12 @@ CREATE TABLE IF NOT EXISTS payment (
     payment_id INT AUTO_INCREMENT PRIMARY KEY,
     agent_id INT NOT NULL,
     amount DECIMAL(12,2) NOT NULL,
-    currency CHAR(3) NOT NULL DEFAULT 'USD',
+    payment_type ENUM('Salary', 'Bonus', 'Compensation', 'Prime') NOT NULL,
+    verified BOOLEAN NOT NULL DEFAULT FALSE,
     payment_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    payment_type ENUM('Salary','Bonus','Compensation','Prime') NOT NULL,
-    description VARCHAR(500),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_payment_agent FOREIGN KEY (agent_id) REFERENCES agent(agent_id) ON DELETE CASCADE
+    reason VARCHAR(500) NULL,
+    CONSTRAINT fk_payment_agent
+    FOREIGN KEY (agent_id)
+    REFERENCES agent(agent_id)
+    ON DELETE CASCADE
     );

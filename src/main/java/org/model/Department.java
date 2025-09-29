@@ -10,12 +10,17 @@ public class Department {
     //default constructor
     public Department(){};
 
-    //parametrized constructor
-    public Department(String idDepartment, String name, List<Agent> agents) {
+    //parametrized constructor with agents list
+    public Department(int idDepartment, String name, List<Agent> agents) {
 
         this.idDepartment = idDepartment;
         this.name = name;
         this.agents = agents;
+    }
+
+    //parametrized constructor with only the name of the department
+    public Department(String name){
+        this.name = name;
     }
 
     //Getters and Setters
@@ -31,7 +36,7 @@ public class Department {
         return agents;
     }
 
-    public void setIdDepartment(String idDepartment) {
+    public void setIdDepartment(int idDepartment) {
         this.idDepartment = idDepartment;
     }
 
