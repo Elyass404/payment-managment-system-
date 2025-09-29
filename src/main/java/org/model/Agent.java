@@ -24,6 +24,14 @@ public class Agent extends Person {
         this.payments = payments;
 
     }
+    public Agent(String firstName, String lastName, String email, String password,
+                 String typeAgent, Department department) {
+
+        super(firstName, lastName, email, password);
+        this.idAgent= idAgent;
+        this.typeAgent = typeAgent;
+        this.department = department;
+    }
 
     //Parametrized Constructor
     public Agent(int idAgent, String firstName, String lastName, String email, String password,
@@ -35,6 +43,7 @@ public class Agent extends Person {
         this.department = department;
         this.payments = payments;
     }
+
 
     //Getters and setters
 

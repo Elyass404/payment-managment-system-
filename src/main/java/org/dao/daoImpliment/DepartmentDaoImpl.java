@@ -21,11 +21,16 @@ public class DepartmentDaoImpl implements DepartmentDao {
     public void addDepartment(Department department) {
         String sql = "INSERT INTO department(name) VALUES (?)";
 
-        try (PreparedStatement stmnt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmnt = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
             stmnt.setString(1, department.getName());
 
             int result = stmnt.executeUpdate();
             if (result > 0) {
+
+                ResultSet depId = stmnt.getGeneratedKeys();
+                if (depId.next()) {
+                    department.setIdDepartment(depId.getInt(1));
+                }
                 System.out.println("You successfully added a new department.");
             } else {
                 System.out.println("Sorry, something went wrong when adding the department, please try again.");
@@ -38,7 +43,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     public Optional<Department> getDepartmentById(int id) {
-        String sql = "SELECT * FROM department WHERE id = ?";
+        String sql = "SELECT * FROM department WHERE department_id = ?";
 
         try (PreparedStatement stmnt = connection.prepareStatement(sql)) {
             stmnt.setInt(1, id);
@@ -46,7 +51,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
             try (ResultSet result = stmnt.executeQuery()) {
                 if (result.next()) {
                     Department department = new Department();
-                    department.setIdDepartment(result.getInt("id"));
+                    department.setIdDepartment(result.getInt("department_id"));
                     department.setName(result.getString("name"));
 
                     return Optional.of(department);
@@ -70,7 +75,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
             while (result.next()) {
                 Department department = new Department();
-                department.setIdDepartment(result.getInt("id"));
+                department.setIdDepartment(result.getInt("department_id"));
                 department.setName(result.getString("name"));
 
                 departments.add(department);
@@ -86,7 +91,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     public void updateDepartment(Department department) {
-        String sql = "UPDATE department SET name = ? WHERE id = ?";
+        String sql = "UPDATE department SET name = ? WHERE department_id = ?";
 
         try (PreparedStatement stmnt = connection.prepareStatement(sql)) {
             stmnt.setString(1, department.getName());
@@ -107,7 +112,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     public void deleteDepartment(Department department) {
-        String sql = "DELETE FROM department WHERE id = ?";
+        String sql = "DELETE FROM department WHERE department_id = ?";
 
         try (PreparedStatement stmnt = connection.prepareStatement(sql)) {
             stmnt.setInt(1, department.getIdDepartment());
