@@ -9,6 +9,6 @@ public interface PaymentDao {
     Optional<Payment> getPaymentById(int id);
     List<Payment> getAllPayments();
     List<Payment> getPaymentsByAgentId(int agentId);
-    void updatePayment(Payment payment);
-    void deletePayment(Payment payment);
+    boolean updatePayment(Payment payment);
+    boolean deletePayment(Payment payment);
 }

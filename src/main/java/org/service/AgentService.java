@@ -5,13 +5,14 @@ import org.model.Agent;
 import java.util.List;
 
 public interface AgentService {
-
-        void AssignResponsible(int agentId, int DepartmentId);
+        //Crud methods
         void addAgent(Agent agent);
         List<Agent> getAllAgents();
         Agent getAgentById(int id);
         boolean updateAgent(Agent agent);
         boolean deleteAgent(int id);
 
+        //other methods to add
+        void AssignResponsible(int agentId, int DepartmentId);
     }
 

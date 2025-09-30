@@ -197,9 +197,9 @@ public class PaymentDaoImpl implements PaymentDao {
     }
 
     @Override
-    public void updatePayment(Payment payment) {
+    public boolean updatePayment(Payment payment) {
         String sql = "UPDATE payment SET agent_id = ?, amount = ?, payment_type = ?, verified = ?, payment_date = ?, reason = ? WHERE payment_id = ?";
-
+        boolean decesion ;
         try (PreparedStatement stmnt = connection.prepareStatement(sql)) {
             stmnt.setInt(1, payment.getAgent().getIdAgent());
             stmnt.setDouble(2, payment.getAmount());
@@ -212,18 +212,21 @@ public class PaymentDaoImpl implements PaymentDao {
             int result = stmnt.executeUpdate();
             if (result > 0) {
                 System.out.println("Payment updated successfully!");
+                return true;
             } else {
                 System.out.println("Failed to update payment. Please try again.");
+                return false;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
 
     @Override
-    public void deletePayment(Payment payment) {
+    public boolean deletePayment(Payment payment) {
         String sql = "DELETE FROM payment WHERE payment_id = ?";
 
         try (PreparedStatement stmnt = connection.prepareStatement(sql)) {
@@ -232,12 +235,15 @@ public class PaymentDaoImpl implements PaymentDao {
             int result = stmnt.executeUpdate();
             if (result > 0) {
                 System.out.println("Payment deleted successfully!");
+                return true;
             } else {
                 System.out.println("Failed to delete payment. Please check the ID and try again.");
+                return true;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return  false;
         }
     }
 

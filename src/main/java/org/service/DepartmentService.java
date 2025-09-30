@@ -5,6 +5,8 @@ import org.model.Department;
 import java.util.List;
 
 public interface DepartmentService {
+
+    //Crud methods
    void addDepartment(Department department);
    List<Department> getAllDepartments ();
    Department getDepartmentById(int id);
