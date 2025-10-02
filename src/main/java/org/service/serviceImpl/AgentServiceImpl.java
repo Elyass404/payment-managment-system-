@@ -102,43 +102,20 @@ public class AgentServiceImpl implements AgentService {
         }
     }
 
+    @Override
+    public List<Agent> getAgentsByDepartment(int departmentId){
+        return agentDao.getAgentsByDepartment(departmentId);
+    }
+
+    @Override
+    public Agent getResponsibleOfDepartment(int departmentId){
+        return agentDao.getResponsibleOfDepartment(departmentId).orElse(null);
+    }
+
     //new method
 
     public static void main(String[] args) throws SQLException {
         // 1. Create a database connection
         Connection connection = JdbcConnectionManager.getInstance().getConnection(); // your utility to get a JDBC connection
-
-        // 2. Initialize the service
-        AgentServiceImpl agentService = new AgentServiceImpl(connection);
-        DepartmentDaoImpl departmentDao = new DepartmentDaoImpl(connection);
-
-        Optional<Department> dep = departmentDao.getDepartmentById(15);
-
-        agentService.addAgent(new Agent("Hmad", "Si Brahim", "sibrahim.hmad@example.com", "1234", "Worker", dep.get()));
-
-        // 3. Retrieve all agents (optional, just to see initial state)
-        System.out.println("Agents before assigning responsible:");
-        agentService.getAllAgents().forEach(a ->
-                System.out.println(a.getIdAgent() + " - " + a.getFirstName() + " " + a.getLastName() + " | Responsible: " + a.getIsResponsible())
-        );
-
-        // 4. Assign a responsible agent to a department
-        int agentIdToAssign = 24;       // replace with a valid agent ID
-        int departmentId = 15;          // replace with a valid department ID
-        agentService.AssignResponsible(agentIdToAssign, departmentId);
-
-        // 5. Retrieve all agents again to verify change
-        System.out.println("\nAgents after assigning responsible:");
-        agentService.getAllAgents().forEach(a ->
-                System.out.println(a.getIdAgent() + " - " + a.getFirstName() + " " + a.getLastName() + " | Responsible: " + a.getIsResponsible())
-        );
-
-        // 6. Close the connection
-        try {
-            connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
-
 }

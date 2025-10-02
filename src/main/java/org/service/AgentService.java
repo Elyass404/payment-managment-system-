@@ -14,5 +14,7 @@ public interface AgentService {
 
         //other methods to add
         void AssignResponsible(int agentId, int DepartmentId);
+        List<Agent> getAgentsByDepartment(int departmentId);
+        Agent getResponsibleOfDepartment(int departmentId);
     }
 

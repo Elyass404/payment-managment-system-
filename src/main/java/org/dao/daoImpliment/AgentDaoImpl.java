@@ -160,4 +160,76 @@ public class AgentDaoImpl implements AgentDao {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<Agent> getAgentsByDepartment(int departmentId) {
+        List<Agent> agents = new ArrayList<>();
+        String sql = "SELECT * FROM agent WHERE department_id = ?";
+
+        try (PreparedStatement stmnt = connection.prepareStatement(sql)) {
+            stmnt.setInt(1, departmentId);
+            ResultSet rs = stmnt.executeQuery();
+
+            while (rs.next()) {
+                Department department = new DepartmentDaoImpl(connection)
+                        .getDepartmentById(departmentId)
+                        .orElse(null);
+
+                Agent agent = new Agent(
+                        rs.getInt("agent_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("agent_type"),
+                        department,
+                        null // payments later
+                );
+                agent.setPassword(rs.getString("password"));
+                agent.setIsResponsible(rs.getBoolean("is_responsible"));
+
+                agents.add(agent);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return agents;
+    }
+
+    @Override
+    public Optional<Agent> getResponsibleOfDepartment(int departmentId) {
+        String sql = "SELECT * FROM agent WHERE department_id = ? AND is_responsible = TRUE";
+
+        try (PreparedStatement stmnt = connection.prepareStatement(sql)) {
+            stmnt.setInt(1, departmentId);
+            ResultSet rs = stmnt.executeQuery();
+
+            if (rs.next()) {
+                Department department = new DepartmentDaoImpl(connection)
+                        .getDepartmentById(departmentId)
+                        .orElse(null);
+
+                Agent agent = new Agent(
+                        rs.getInt("agent_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("agent_type"),
+                        department,
+                        null
+                );
+                agent.setPassword(rs.getString("password"));
+                agent.setIsResponsible(rs.getBoolean("is_responsible"));
+
+                return Optional.of(agent);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
+    }
+
 }

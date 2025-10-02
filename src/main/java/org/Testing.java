@@ -6,7 +6,9 @@ import org.dao.daoImpliment.PaymentDaoImpl;
 import org.model.Agent;
 import org.model.Department;
 import org.model.Payment;
+import org.service.AgentService;
 import org.service.DepartmentService;
+import org.service.serviceImpl.AgentServiceImpl;
 import org.service.serviceImpl.DepartmentServiceImpl;
 import util.JdbcConnectionManager;
 
@@ -24,79 +26,26 @@ public class Testing {
             System.out.println("The connection between the project and the database is done successfully: " + conn);
             //conn.close();
 
-            DepartmentDaoImpl departmentDao = new DepartmentDaoImpl(conn);
-            Department dep = new Department("RH");
-            departmentDao.addDepartment(dep);
+            AgentService agentService = new AgentServiceImpl(conn);
 
-            Optional<Department> getDep = departmentDao.getDepartmentById(dep.getIdDepartment());
-            getDep.ifPresent(d -> System.out.println("Department found: " + d.getName()));
-
-            // Test AgentDao
-            AgentDaoImpl agentDao = new AgentDaoImpl(conn);
-            Agent agent = new Agent("Hamza", "test", "Hamza.test@example.com", "1234","Worker", dep);
-
-            agentDao.addAgent(agent);
+            int departmentId = 15; // <-- choose a department ID that exists in your DB
 
 
-            //agent.setEmail("updated@email.com");
-            agentDao.updateAgent(agent);
-
-            dep.setName("RH");
-            departmentDao.updateDepartment(dep);
-
-            Optional<Agent> getAgent = agentDao.getAgentById(agent.getIdAgent());
-            getAgent.ifPresent(a -> System.out.println("Agent found: "+a.getIdAgent()+" | " + a.getFirstName() + " " + a.getLastName() + " |" + a.getEmail()));
-
-            List<Agent> allAgents = agentDao.getAllAgents();
-            for(Agent a : allAgents){
-                System.out.println("Agent N°: "+a.getIdAgent()+" | " + a.getFirstName() + " " + a.getLastName());
+            System.out.println("=== All Agents in Department " + departmentId + " ===");
+            List<Agent> agents = agentService.getAgentsByDepartment(departmentId);
+            for (Agent a : agents) {
+                System.out.println(a.getIdAgent() + " - " + a.getFirstName() + " " + a.getLastName()
+                        + " | Responsible: " + a.getIsResponsible());
             }
 
-            //testing the payment entity
-            //testing the payment entity
-            PaymentDao paydao = new PaymentDaoImpl(conn);
-            Payment payment = new Payment( agent,  1200.00,  "Salary" ,  true, LocalDateTime.of(2025, 1, 15, 0, 0), "His salary of the month");
-
-            paydao.addPayment(payment);
-            //paydao.getPaymentsByAgentId(17);
-            //paydao.getPaymentById(4);
-            paydao.getAllPayments();
-            //paydao.getPaymentsByAgentId(17);
-
-
-            //teting the delete methods
-//        agentDao.deleteAgent(agent);
-//        departmentDao.deleteDepartment(dep);
-//          paymentDao.deletePayment(payment);
-
-            //________________________________________________
-
-            //testing the implimentation of the services
-
-            DepartmentService departmentService =  new DepartmentServiceImpl(conn);
-
-            // Add new department
-            Department depart = new Department("Finance");
-            departmentService.addDepartment(dep);
-
-            // Fetch department by ID
-            Department fetchedDep = departmentService.getDepartmentById(depart.getIdDepartment());
-            if (fetchedDep != null) {
-                System.out.println("Department found: " + fetchedDep.getName());
+            // 3. Test "Find the responsible agent of a department"
+            System.out.println("\n=== Responsible Agent in Department " + departmentId + " ===");
+            Agent responsible = agentService.getResponsibleOfDepartment(departmentId);
+            if (responsible != null) {
+                System.out.println("Responsible: " + responsible.getFirstName() + " " + responsible.getLastName());
+            } else {
+                System.out.println("No responsible agent found for this department.");
             }
-
-            // Update department
-            depart.setName("Accounting");
-            departmentService.updateDepartment(depart);
-
-            // Get all departments
-            List<Department> allDepartments = departmentService.getAllDepartments();
-            for (Department d : allDepartments) {
-                System.out.println("Department: " + d.getIdDepartment() + " | " + d.getName());
-            }
-
-            // Delete department
-            departmentService.deleteDepartment(depart.getIdDepartment());
 
         } catch (Exception e){
             e.printStackTrace();

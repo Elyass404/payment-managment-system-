@@ -11,4 +11,7 @@ public interface AgentDao {
     List<Agent> getAllAgents();
     void updateAgent(Agent agent);
     void deleteAgent(Agent agent);
+
+    List<Agent> getAgentsByDepartment(int departmentId);
+    Optional<Agent> getResponsibleOfDepartment(int departmentId);
 }
