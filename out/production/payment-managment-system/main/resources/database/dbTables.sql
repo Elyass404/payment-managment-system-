@@ -14,18 +14,22 @@ CREATE TABLE IF NOT EXISTS agent (
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    agent_type ENUM('Worker','Responsible','Director', 'Intern') NOT NULL,
+    agent_type ENUM('Worker','Responsible','Director','Intern') NOT NULL,
     department_id INT,
+    is_responsible BOOLEAN NOT NULL DEFAULT FALSE,   -- ✅ new column
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_agent_department FOREIGN KEY (department_id) REFERENCES department(department_id) ON DELETE SET NULL
+    CONSTRAINT fk_agent_department
+    FOREIGN KEY (department_id)
+    REFERENCES department(department_id)
+                                                   ON DELETE SET NULL
     );
 
 CREATE TABLE IF NOT EXISTS payment (
     payment_id INT AUTO_INCREMENT PRIMARY KEY,
     agent_id INT NOT NULL,
     amount DECIMAL(12,2) NOT NULL,
-    payment_type ENUM('Salary', 'Bonus', 'Compensation', 'Prime') NOT NULL,
+    payment_type ENUM('Salary','Bonus','Compensation','Prime') NOT NULL,
     verified BOOLEAN NOT NULL DEFAULT FALSE,
     payment_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     reason VARCHAR(500) NULL,
