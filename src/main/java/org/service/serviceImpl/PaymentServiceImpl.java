@@ -6,6 +6,7 @@ import org.model.Agent;
 import org.model.Payment;
 import org.service.AgentService;
 import org.service.PaymentService;
+import util.PaymentValidator;
 
 import java.sql.Connection;
 import java.util.Comparator;
@@ -23,8 +24,15 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public void addPayment(Payment payment) {
+    public String addPayment(Payment payment) {
+
+        // we should validate the payment first using the validator
+        String validationError = PaymentValidator.validate(payment);
+        if (validationError != null) {
+            return validationError; // don’t insert, return the error msg
+        }
         paymentDao.addPayment(payment);
+        return "Payment added successfully!";
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.List;
 public interface PaymentService {
 
     //basic Crud methods
-    void addPayment(Payment payment);
+    String addPayment(Payment payment);
     List<Payment> getPaymentsByAgent(int agentId);
     List<Payment> getAllPayments();
     boolean updatePayment(Payment payment);
