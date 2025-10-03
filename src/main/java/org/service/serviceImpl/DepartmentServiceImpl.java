@@ -40,7 +40,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public void deleteDepartment(int id) {
-        // better to fetch first (optional)
         Department department = getDepartmentById(id);
         if (department != null) {
             departmentDao.deleteDepartment(department);

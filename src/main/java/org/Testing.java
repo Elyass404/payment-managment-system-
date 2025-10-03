@@ -28,8 +28,7 @@ public class Testing {
 
             AgentService agentService = new AgentServiceImpl(conn);
 
-            int departmentId = 15; // <-- choose a department ID that exists in your DB
-
+            int departmentId = 15;
 
             System.out.println("=== All Agents in Department " + departmentId + " ===");
             List<Agent> agents = agentService.getAgentsByDepartment(departmentId);
