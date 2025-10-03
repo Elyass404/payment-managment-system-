@@ -7,11 +7,11 @@ import java.util.List;
 public interface PaymentService {
 
     //basic Crud methods
-    String addPayment(Payment payment);
+    String addPayment(Agent currentAgent, Payment payment);
     List<Payment> getPaymentsByAgent(int agentId);
     List<Payment> getAllPayments();
-    boolean updatePayment(Payment payment);
-    boolean deletePayment(Payment payment);
+    boolean updatePayment(Agent currentAgent, Payment payment);
+    boolean deletePayment(Agent currentAgent, Payment payment);
 
     //other methods to add
     double calculateTotalPaymentsByAgent(int agentId);
@@ -20,9 +20,9 @@ public interface PaymentService {
     List<Payment> sortPaymentsByAmount(int agentId);
 
 
-    double calculateTotalPaymentsByDepartment(int departmentId, List<Agent> agentsOfDepartment);
-    double calculateAverageSalaryByDepartment(int departmentId, List<Agent> agentsOfDepartment);
-    List<Agent> rankAgentsByTotalPayment(List<Agent> agentsOfDepartment);
+    double calculateTotalPaymentsByDepartment(Agent currentAgent, int departmentId, List<Agent> agentsOfDepartment);
+    double calculateAverageSalaryByDepartment(Agent currentAgent, int departmentId, List<Agent> agentsOfDepartment);
+    List<Agent> rankAgentsByTotalPayment(Agent currentAgent, List<Agent> agentsOfDepartment);
 
 
 

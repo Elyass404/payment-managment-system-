@@ -24,16 +24,40 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public String addPayment(Payment payment) {
+    public String addPayment(Agent currentAgent, Payment payment) {
 
-        // we should validate the payment first using the validator
-        String validationError = PaymentValidator.validate(payment);
-        if (validationError != null) {
-            return validationError; // don’t insert, return the error msg
+        if (!agentService.isDirector(currentAgent)) {  // if he is not a director
+            if (!agentService.isResponsible(currentAgent)) {// if not director we will check if he is responsibel
+                throw new SecurityException("Only Director or Responsible can add payments.");
+            } else {  // now if he is a responsible then
+                if (payment.getAgent() == null || payment.getAgent().getDepartment() == null) {
+                    throw new IllegalArgumentException("Payment must be linked to an agent with a department.");
+                }
+
+                if (payment.getAgent().getDepartment().getIdDepartment() !=
+                        currentAgent.getDepartment().getIdDepartment()) {
+                    throw new SecurityException("Responsible can only add payments for agents in their own department.");
+                }
+
+                String validationError = PaymentValidator.validate(payment);
+                if (validationError != null) {
+                    return validationError;
+                }
+
+                paymentDao.addPayment(payment);
+                return "Payment added successfully by Responsible!";
+            }
+        } else { //but if he is a director then
+            String validationError = PaymentValidator.validate(payment);
+            if (validationError != null) {
+                return validationError;
+            }
+
+            paymentDao.addPayment(payment);
+            return "Payment added successfully by Director!";
         }
-        paymentDao.addPayment(payment);
-        return "Payment added successfully!";
     }
+
 
     @Override
     public List<Payment> getPaymentsByAgent(int agentId) {
@@ -46,14 +70,62 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public boolean updatePayment(Payment payment) {
-        return paymentDao.updatePayment(payment);
+    public boolean updatePayment(Agent currentAgent, Payment payment) {
+
+        if (!agentService.isDirector(currentAgent)) {  // not director
+            if (!agentService.isResponsible(currentAgent)) {
+                throw new SecurityException("Only Director or Responsible can update payments.");
+            } else { // Responsible case
+                if (payment.getAgent() == null || payment.getAgent().getDepartment() == null) {
+                    throw new IllegalArgumentException("Payment must be linked to an agent with a department.");
+                }
+
+                if (payment.getAgent().getDepartment().getIdDepartment() !=
+                        currentAgent.getDepartment().getIdDepartment()) {
+                    throw new SecurityException("Responsible can only update payments for agents in their own department.");
+                }
+
+                String validationError = PaymentValidator.validate(payment);
+                if (validationError != null) {
+                    System.out.println("Validation failed: " + validationError);
+                    return false;
+                }
+
+                return paymentDao.updatePayment(payment);
+            }
+        } else { // Director case
+            String validationError = PaymentValidator.validate(payment);
+            if (validationError != null) {
+                System.out.println("Validation failed: " + validationError);
+                return false;
+            }
+
+            return paymentDao.updatePayment(payment);
+        }
     }
 
     @Override
-    public boolean deletePayment(Payment payment) {
-        return paymentDao.deletePayment(payment);
+    public boolean deletePayment(Agent currentAgent, Payment payment) {
+        if (!agentService.isDirector(currentAgent)) { // not director
+            if (!agentService.isResponsible(currentAgent)) {
+                throw new SecurityException("Only Director or Responsible can delete payments.");
+            } else { // Responsible case
+                if (payment.getAgent() == null || payment.getAgent().getDepartment() == null) {
+                    throw new IllegalArgumentException("Payment must be linked to an agent with a department.");
+                }
+
+                if (payment.getAgent().getDepartment().getIdDepartment() !=
+                        currentAgent.getDepartment().getIdDepartment()) {
+                    throw new SecurityException("Responsible can only delete payments for agents in their own department.");
+                }
+
+                return paymentDao.deletePayment(payment);
+            }
+        } else { // Director case
+            return paymentDao.deletePayment(payment);
+        }
     }
+
 
     // ---------- Business logic methods ----------
     @Override
@@ -95,7 +167,18 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public double calculateTotalPaymentsByDepartment(int departmentId, List<Agent> agentsOfDepartment) {
+    public double calculateTotalPaymentsByDepartment(Agent currentAgent, int departmentId, List<Agent> agentsOfDepartment) {
+        if (!agentService.isDirector(currentAgent)) {
+            if (!agentService.isResponsible(currentAgent)) {
+                throw new SecurityException("Only Director or Responsible can view department payments.");
+            } else { // Responsible case
+                if (currentAgent.getDepartment() == null ||
+                        currentAgent.getDepartment().getIdDepartment() != departmentId) {
+                    throw new SecurityException("Responsible can only view stats for their own department.");
+                }
+            }
+        }
+
         return agentsOfDepartment.stream()
                 .flatMap(agent -> getPaymentsByAgent(agent.getIdAgent()).stream())
                 .mapToDouble(Payment::getAmount)
@@ -103,16 +186,41 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public double calculateAverageSalaryByDepartment(int departmentId, List<Agent> agentsOfDepartment) {
+    public double calculateAverageSalaryByDepartment(Agent currentAgent, int departmentId, List<Agent> agentsOfDepartment) {
+        if (!agentService.isDirector(currentAgent)) {
+            if (!agentService.isResponsible(currentAgent)) {
+                throw new SecurityException("Only Director or Responsible can view salary stats.");
+            } else { // Responsible case
+                if (currentAgent.getDepartment() == null ||
+                        currentAgent.getDepartment().getIdDepartment() != departmentId) {
+                    throw new SecurityException("Responsible can only view stats for their own department.");
+                }
+            }
+        }
+
         return agentsOfDepartment.stream()
-                .flatMap(agent -> filterPaymentsByType(agent.getIdAgent(), "SALARY").stream())
+                .flatMap(agent -> filterPaymentsByType(agent.getIdAgent(), "Salary").stream())
                 .mapToDouble(Payment::getAmount)
                 .average()
                 .orElse(0.0);
     }
 
     @Override
-    public List<Agent> rankAgentsByTotalPayment(List<Agent> agentsOfDepartment) {
+    public List<Agent> rankAgentsByTotalPayment(Agent currentAgent, List<Agent> agentsOfDepartment) {
+        if (!agentService.isDirector(currentAgent)) {
+            if (!agentService.isResponsible(currentAgent)) {
+                throw new SecurityException("Only Director or Responsible can rank agents by payment.");
+            } else { // Responsible case
+                if (currentAgent.getDepartment() == null ||
+                        agentsOfDepartment.stream().noneMatch(a ->
+                                a.getDepartment() != null &&
+                                        a.getDepartment().getIdDepartment() == currentAgent.getDepartment().getIdDepartment()
+                        )) {
+                    throw new SecurityException("Responsible can only rank agents within their own department.");
+                }
+            }
+        }
+
         return agentsOfDepartment.stream()
                 .sorted((a1, a2) -> Double.compare(
                         calculateTotalPaymentsByAgent(a2.getIdAgent()),
@@ -120,6 +228,7 @@ public class PaymentServiceImpl implements PaymentService {
                 ))
                 .toList();
     }
+
 
 
 }
