@@ -1,9 +1,6 @@
 package org;
-import org.dao.daoImpliment.AgentDaoImpl;
-import org.dao.daoImpliment.DepartmentDaoImpl;
-import org.model.Agent;
-import org.model.Department;
-import org.model.Payment;
+
+import org.controller.AppController;
 import org.service.AgentService;
 import org.service.DepartmentService;
 import org.service.PaymentService;
@@ -13,46 +10,42 @@ import org.service.serviceImpl.PaymentServiceImpl;
 import util.JdbcConnectionManager;
 
 import java.sql.Connection;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
 
 public class Main {
-    public static void main(String[] args){
 
-        try {
-            Connection conn = JdbcConnectionManager.getInstance().getConnection();
-            System.out.println("Database connected: " + conn);
+    public static void main(String[] args) {
+        System.out.println("===================================");
+        System.out.println(" Welcome to the Payments Management System! ");
+        System.out.println("===================================");
 
-            PaymentService paymentService = new PaymentServiceImpl(conn, null);
+        try (Connection connection = JdbcConnectionManager.getInstance().getConnection()) {
 
-            Agent agent = new Agent();
-            agent.setIdAgent(12);
+            // ----- Initialize Services -----
+            AgentService agentService = new AgentServiceImpl(connection);
+            DepartmentService departmentService = new DepartmentServiceImpl(connection, agentService);
+            PaymentService paymentService = new PaymentServiceImpl(connection, agentService);
 
+            // ----- Initialize Controller -----
+            AppController appController = new AppController(agentService, paymentService, departmentService);
 
-            Payment payment = new Payment();
-            payment.setPaymentType("Salary");
-            payment.setAmount(2500.0);
-            payment.setDate(LocalDateTime.now());
-            payment.setReason("Test salary payment");
-            payment.setAgent(agent);
+            boolean exit = false;
 
-            paymentService.addPayment(payment);
+            while (!exit) {
+                // ---- Login and redirect to role menu ----
+                appController.login(); // loops until correct credentials
 
-            // 3. Call the method
-            List<Payment> sortedPayments = paymentService.sortPaymentsByAmount(agent.getIdAgent());
+                // After user logs out from menu, ask if they want to exit
+                System.out.println("\nDo you want to exit the program? (yes/no)");
+                String input = appController.getScanner().nextLine(); // get Scanner from controller
+                if (input.equalsIgnoreCase("yes") || input.equalsIgnoreCase("y")) {
+                    exit = true;
+                    System.out.println("Goodbye!");
+                }
+            }
 
-            // 4. Print results
-            System.out.println("Payments sorted by amount (biggest → smallest):");
-            sortedPayments.forEach(p -> System.out.println(
-                    "ID: " + p.getPaymentId() +
-                            ", Type: " + p.getPaymentType() +
-                            ", Amount: " + p.getAmount()
-            ));
         } catch (Exception e) {
+            System.out.println("Error initializing application: " + e.getMessage());
             e.printStackTrace();
         }
-}
+    }
 }
