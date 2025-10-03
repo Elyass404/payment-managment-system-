@@ -66,6 +66,25 @@ public class AgentServiceImpl implements AgentService {
         }
     }
 
+    //------- Authentication Methods ---------------
+    @Override
+    public Agent login(String email, String password) {
+        return getAllAgents().stream()
+                .filter(a -> a.getEmail().equalsIgnoreCase(email) && a.getPassword().equals(password))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public boolean isDirector(Agent agent) {
+        return agent.getTypeAgent().equalsIgnoreCase("Director");
+    }
+
+    @Override
+    public boolean isResponsible(Agent agent) {
+        return agent.getTypeAgent().equalsIgnoreCase("Responsible");
+    }
+
     //------- Other Methods related to the Agent --------
 
     @Override

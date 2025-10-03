@@ -12,7 +12,13 @@ public interface AgentService {
         boolean updateAgent(Agent agent);
         boolean deleteAgent(int id);
 
-        //other methods to add
+        //authentication methods
+        Agent login(String email, String password);
+        boolean isDirector(Agent agent);
+        boolean isResponsible(Agent agent);
+
+
+    //other methods to add
         void AssignResponsible(int agentId, int DepartmentId);
         List<Agent> getAgentsByDepartment(int departmentId);
         Agent getResponsibleOfDepartment(int departmentId);
