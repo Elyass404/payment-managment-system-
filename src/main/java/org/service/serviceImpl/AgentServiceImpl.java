@@ -24,23 +24,23 @@ public class AgentServiceImpl implements AgentService {
 
 
     @Override
-    public void addAgent(Agent agent) {
+    public void addAgent(Agent currentAgent, Agent agent) {
         agentDao.addAgent(agent);
     }
 
     @Override
-    public List<Agent> getAllAgents() {
+    public List<Agent> getAllAgents(Agent currentAgent) {
+
         return agentDao.getAllAgents();
     }
 
     @Override
     public Agent getAgentById(int id) {
-        // DAO returns Optional<Agent>, here we decide how to handle missing agent
         return agentDao.getAgentById(id).orElse(null);
     }
 
     @Override
-    public boolean updateAgent(Agent agent) {
+    public boolean updateAgent(Agent currentAgent, Agent agent) {
         try {
             agentDao.updateAgent(agent);
             return true;
@@ -51,7 +51,7 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    public boolean deleteAgent(int id) {
+    public boolean deleteAgent(Agent currentAgent, int id) {
         try {
             // Instead of passing an Agent object, we only need the ID
             Agent agent = getAgentById(id);
@@ -69,7 +69,7 @@ public class AgentServiceImpl implements AgentService {
     //------- Authentication Methods ---------------
     @Override
     public Agent login(String email, String password) {
-        return getAllAgents().stream()
+        return getAllAgents(Agent currentAgent).stream()
                 .filter(a -> a.getEmail().equalsIgnoreCase(email) && a.getPassword().equals(password))
                 .findFirst()
                 .orElse(null);
@@ -88,7 +88,7 @@ public class AgentServiceImpl implements AgentService {
     //------- Other Methods related to the Agent --------
 
     @Override
-    public void AssignResponsible(int agentId, int departmentId) {
+    public void AssignResponsible(Agent currentAgent, int agentId, int departmentId) {
         // Get all agents in the department
         List<Agent> agentsInDept = agentDao.getAllAgents().stream()
                 .filter(a -> a.getDepartment() != null && a.getDepartment().getIdDepartment() == departmentId)
@@ -122,12 +122,12 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    public List<Agent> getAgentsByDepartment(int departmentId){
+    public List<Agent> getAgentsByDepartment(Agent currentAgent, int departmentId){
         return agentDao.getAgentsByDepartment(departmentId);
     }
 
     @Override
-    public Agent getResponsibleOfDepartment(int departmentId){
+    public Agent getResponsibleOfDepartment(Agent currentAgent, int departmentId){
         return agentDao.getResponsibleOfDepartment(departmentId).orElse(null);
     }
 
