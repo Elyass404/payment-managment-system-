@@ -25,11 +25,26 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     public void addAgent(Agent currentAgent, Agent agent) {
-        agentDao.addAgent(agent);
+
+        if(agent.getDepartment() == null) {
+            throw new IllegalArgumentException("Agent must be assigned to a department.");
+        }
+
+        if(isDirector(currentAgent)){
+            agentDao.addAgent(agent);
+        }else if(isResponsible(currentAgent)){
+            if(agent.getDepartment().getIdDepartment() == currentAgent.getDepartment().getIdDepartment()){
+                agentDao.addAgent(agent);
+            }else{
+                throw new SecurityException("Responsible can olny add agents to his department");
+            }
+        }else{
+            throw new SecurityException("Only high level responsibles can do this operations!");
+        }
     }
 
     @Override
-    public List<Agent> getAllAgents(Agent currentAgent) {
+    public List<Agent> getAllAgents() {
 
         return agentDao.getAllAgents();
     }
@@ -41,8 +56,22 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     public boolean updateAgent(Agent currentAgent, Agent agent) {
+
+        if(agent.getDepartment() == null) {
+            throw new IllegalArgumentException("Agent must be assigned to a department.");
+        }
         try {
-            agentDao.updateAgent(agent);
+            if (isDirector(currentAgent)) {
+                agentDao.updateAgent(agent);
+            } else if (isResponsible(currentAgent)) {
+                if (agent.getDepartment().getIdDepartment() == currentAgent.getDepartment().getIdDepartment()) {
+                    agentDao.updateAgent(agent);
+                } else {
+                    throw new SecurityException("Responsible can only update agents in their department");
+                }
+            } else {
+                throw new SecurityException("Only Director or Responsible can perform this operation!");
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,26 +79,39 @@ public class AgentServiceImpl implements AgentService {
         }
     }
 
+
     @Override
     public boolean deleteAgent(Agent currentAgent, int id) {
         try {
-            // Instead of passing an Agent object, we only need the ID
             Agent agent = getAgentById(id);
-            if (agent != null) {
-                agentDao.deleteAgent(agent);
-                return true;
+            if (agent == null) {
+                return false; // agent not found
             }
-            return false;
+
+            if (isDirector(currentAgent)) {
+                agentDao.deleteAgent(agent);
+            } else if (isResponsible(currentAgent)) {
+                if (agent.getDepartment().getIdDepartment() == currentAgent.getDepartment().getIdDepartment()) {
+                    agentDao.deleteAgent(agent);
+                } else {
+                    throw new SecurityException("Responsible can only delete agents in their department");
+                }
+            } else {
+                throw new SecurityException("Only Director or Responsible can perform this operation!");
+            }
+
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
+
     //------- Authentication Methods ---------------
     @Override
     public Agent login(String email, String password) {
-        return getAllAgents(Agent currentAgent).stream()
+        return getAllAgents().stream()
                 .filter(a -> a.getEmail().equalsIgnoreCase(email) && a.getPassword().equals(password))
                 .findFirst()
                 .orElse(null);
@@ -89,10 +131,15 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     public void AssignResponsible(Agent currentAgent, int agentId, int departmentId) {
+        if (!isDirector(currentAgent)) {
+            throw new SecurityException("Only the Director can assign a department responsible.");
+        }
+
         // Get all agents in the department
         List<Agent> agentsInDept = agentDao.getAllAgents().stream()
                 .filter(a -> a.getDepartment() != null && a.getDepartment().getIdDepartment() == departmentId)
                 .toList();
+
         // Unset current responsible if exists
         for (Agent agent : agentsInDept) {
             if (agent.getIsResponsible()) {
@@ -101,15 +148,15 @@ public class AgentServiceImpl implements AgentService {
             }
         }
 
-        //Get the new responsible agent
+        // Get the new responsible agent
         Agent newResponsible = agentDao.getAgentById(agentId).orElse(null);
 
         if (newResponsible != null) {
-            //Validate agent belongs to the department
+            // Validate agent belongs to the department
             if (newResponsible.getDepartment() != null &&
                     newResponsible.getDepartment().getIdDepartment() == departmentId) {
 
-                //Assign as responsible
+                // Assign as responsible
                 newResponsible.setIsResponsible(true);
                 agentDao.updateAgent(newResponsible);
                 System.out.println("Agent " + newResponsible.getFirstName() + " is now the responsible of department " + departmentId);
@@ -121,20 +168,28 @@ public class AgentServiceImpl implements AgentService {
         }
     }
 
-    @Override
-    public List<Agent> getAgentsByDepartment(Agent currentAgent, int departmentId){
-        return agentDao.getAgentsByDepartment(departmentId);
-    }
 
     @Override
-    public Agent getResponsibleOfDepartment(Agent currentAgent, int departmentId){
-        return agentDao.getResponsibleOfDepartment(departmentId).orElse(null);
+    public List<Agent> getAgentsByDepartment(Agent currentAgent, int departmentId) {
+        if (isDirector(currentAgent) ||
+                (isResponsible(currentAgent) && currentAgent.getDepartment() != null
+                        && currentAgent.getDepartment().getIdDepartment() == departmentId)) {
+            return agentDao.getAgentsByDepartment(departmentId);
+        } else {
+            throw new SecurityException("You do not have permission to view agents of this department.");
+        }
     }
 
-    //new method
 
-    public static void main(String[] args) throws SQLException {
-        // 1. Create a database connection
-        Connection connection = JdbcConnectionManager.getInstance().getConnection(); // your utility to get a JDBC connection
+    @Override
+    public Agent getResponsibleOfDepartment(Agent currentAgent, int departmentId) {
+        if (isDirector(currentAgent) ||
+                (isResponsible(currentAgent) && currentAgent.getDepartment() != null
+                        && currentAgent.getDepartment().getIdDepartment() == departmentId)) {
+            return agentDao.getResponsibleOfDepartment(departmentId).orElse(null);
+        } else {
+            throw new SecurityException("You do not have permission to view the responsible of this department.");
+        }
     }
+
 }

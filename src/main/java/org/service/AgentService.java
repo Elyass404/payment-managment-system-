@@ -7,7 +7,7 @@ import java.util.List;
 public interface AgentService {
         //Crud methods
         void addAgent(Agent currentAgent, Agent agent);
-        List<Agent> getAllAgents(Agent currentAgent);
+        List<Agent> getAllAgents();
         Agent getAgentById(int id);
         boolean updateAgent(Agent currentAgent, Agent agent);
         boolean deleteAgent(Agent currentAgent, int id);
