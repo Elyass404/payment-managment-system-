@@ -5,21 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="09785f95-a215-4d86-8de3-b456ee088fdd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/view/DirectorMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/view/ResponsibleMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/view/WorkerMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/payment-managment-system/org/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/payment-managment-system/org/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/payment-managment-system/org/Testing.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/AgentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/AgentService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/DepartmentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/DepartmentService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/PaymentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/PaymentService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/ServiceImpl/AgentServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/ServiceImpl/AgentServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/ServiceImpl/DepartmentServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/ServiceImpl/DepartmentServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/ServiceImpl/PaymentServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/payment-managment-system/org/service/ServiceImpl/PaymentServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Testing.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/controller/AppController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/controller/AppController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,43 +26,43 @@
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="336Lqe90zKbfvn5L8yMBABYUAf1" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.AgentServiceImpl.executor": "Run",
-    "Application.Main.executor": "Run",
-    "Application.Testing.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Notification.DisplayName-DoNotAsk-WindowsDefender": "Microsoft Defender may affect IDE",
-    "Notification.DoNotAsk-WindowsDefender": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.AgentServiceImpl.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Testing.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-WindowsDefender&quot;: &quot;Microsoft Defender may affect IDE&quot;,
+    &quot;Notification.DoNotAsk-WindowsDefender&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Youcode\Desktop\payment-managment-system\src\main\resources\database" />
@@ -98,7 +84,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1758632771781</updated>
-      <workItem from="1758632772675" duration="119595000" />
+      <workItem from="1758632772675" duration="120825000" />
+      <workItem from="1759595332189" duration="4051000" />
     </task>
     <servers />
   </component>
