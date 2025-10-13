@@ -20,10 +20,13 @@ public interface PaymentService {
     List<Payment> sortPaymentsByAmount(int agentId);
 
 
+
+
     double calculateTotalPaymentsByDepartment(Agent currentAgent, int departmentId, List<Agent> agentsOfDepartment);
     double calculateAverageSalaryByDepartment(Agent currentAgent, int departmentId, List<Agent> agentsOfDepartment);
     List<Agent> rankAgentsByTotalPayment(Agent currentAgent, List<Agent> agentsOfDepartment);
 
 
 
+    void AgentsAverageSalaryByDepartment(Agent currentAgent, int departmentId);
 }

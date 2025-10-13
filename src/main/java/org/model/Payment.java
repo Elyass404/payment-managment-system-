@@ -1,6 +1,5 @@
 package org.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Payment {
@@ -10,29 +9,31 @@ public class Payment {
     private double amount;
     private String paymentType;
     private boolean verified;
-    private LocalDateTime date;
+    private LocalDateTime date=LocalDateTime.now();
     private String reason;
 
     // Constructors
 
     // Full constructor
     public Payment(int paymentId, Agent agent, double amount, String paymentType, boolean verified, LocalDateTime date, String reason) {
+        System.out.println("1");
         this.paymentId = paymentId;
         this.agent = agent;
         this.amount = amount;
         this.paymentType = paymentType;
         this.verified = verified;
-        this.date = date;
+        this.date = LocalDateTime.now();
         this.reason = reason;
     }
 
     // Constructor without paymentId (for inserting new payments)
     public Payment(Agent agent, double amount, String paymentType, boolean verified, LocalDateTime date, String reason) {
+        System.out.println("2");
         this.agent = agent;
         this.amount = amount;
         this.paymentType = paymentType;
         this.verified = verified;
-        this.date = date;
+        this.date = LocalDateTime.now();
         this.reason = reason;
     }
 

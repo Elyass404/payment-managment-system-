@@ -25,7 +25,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public String addPayment(Agent currentAgent, Payment payment) {
-
+        System.out.println("yyyyyyyyyyyyyyyyyyyyy");
+        System.out.println(payment.getDate().getYear());
         if (!agentService.isDirector(currentAgent)) {  // if he is not a director
             if (!agentService.isResponsible(currentAgent)) {// if not director we will check if he is responsibel
                 throw new SecurityException("Only Director or Responsible can add payments.");
@@ -229,6 +230,16 @@ public class PaymentServiceImpl implements PaymentService {
                 .toList();
     }
 
-
+    @Override
+    public void AgentsAverageSalaryByDepartment(Agent currentAgent, int departmentId){
+        List <Agent> agentsByDepartment = agentService.getAgentsByDepartment(currentAgent,departmentId);
+        agentsByDepartment.stream()
+                .forEach(agent -> {
+                    System.out.println(agent.getFirstName());
+                    double average=agent.getPayments().stream().mapToDouble(Payment::getAmount).average().orElse(0);
+                    System.out.println("average"+average);
+                })
+                ;
+    }
 
 }
